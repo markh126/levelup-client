@@ -12,6 +12,10 @@ function Events() {
     getEvents().then((data) => setEvents(data));
   }, []);
 
+  const getAllEvents = () => {
+    getEvents().then((data) => setEvents(data));
+  };
+
   return (
     <>
       <article className="events">
@@ -25,7 +29,7 @@ function Events() {
         </Button>
         {events.map((event) => (
           <section key={`event--${event.id}`} className="event">
-            <EventCard description={event.description} time={event.time} date={event.date} />
+            <EventCard id={event.id} description={event.description} time={event.time} date={event.date} game={event.game} onUpdate={getAllEvents} />
           </section>
         ))}
       </article>

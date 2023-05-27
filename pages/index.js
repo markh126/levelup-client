@@ -12,6 +12,10 @@ function Home() {
     getGames().then((data) => setGames(data));
   }, []);
 
+  const getAllGames = () => {
+    getGames().then((data) => setGames(data));
+  };
+
   return (
     <>
       <article className="games">
@@ -26,7 +30,7 @@ function Home() {
         </Button>
         {games.map((game) => (
           <section key={`game--${game.id}`} className="game">
-            <GameCard title={game.title} maker={game.maker} numberOfPlayers={game.number_of_players} skillLevel={game.skill_level} gameType={game.game_type} />
+            <GameCard id={game.id} title={game.title} maker={game.maker} numberOfPlayers={game.number_of_players} skillLevel={game.skill_level} gameType={game.game_type} onUpdate={getAllGames} />
           </section>
         ))}
       </article>
