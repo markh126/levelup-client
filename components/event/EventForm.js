@@ -12,7 +12,7 @@ const initialState = {
   description: '',
   date: '',
   time: '',
-  game: 0,
+  game: '',
 };
 
 const EventForm = ({ obj }) => {
@@ -33,7 +33,7 @@ const EventForm = ({ obj }) => {
           description: eventObj.description,
           date: eventObj.date,
           time: eventObj.time,
-          game: eventObj.game?.id,
+          game: eventObj.game.id,
         }));
         console.warn(obj);
       });
@@ -58,8 +58,8 @@ const EventForm = ({ obj }) => {
         description: currentEvent.description,
         date: currentEvent.date,
         time: currentEvent.time,
-        game: Number(currentEvent.game),
-        userId: user.id,
+        game: currentEvent.game,
+        userId: user.uid,
       };
       updateEvent(event).then(() => router.push('/events'));
     } else {
@@ -68,8 +68,8 @@ const EventForm = ({ obj }) => {
         description: currentEvent.description,
         date: currentEvent.date,
         time: currentEvent.time,
-        game: Number(currentEvent.game),
-        userId: user.id,
+        game: currentEvent.game,
+        userId: user.uid,
       };
       createEvent(event).then(() => router.push('/events'));
     }
@@ -79,17 +79,17 @@ const EventForm = ({ obj }) => {
     <>
       <Form onSubmit={handleSubmit}>
         <Form.Group className="mb-3">
-          <Form.Label>Title</Form.Label>
+          <Form.Label>Description</Form.Label>
           <Form.Control name="description" required value={currentEvent.description} onChange={handleChange} />
         </Form.Group>
 
         <Form.Group className="mb-3">
-          <Form.Label>Maker</Form.Label>
+          <Form.Label>Date</Form.Label>
           <Form.Control name="date" required value={currentEvent.date} onChange={handleChange} />
         </Form.Group>
 
         <Form.Group className="mb-3">
-          <Form.Label>Number of Players</Form.Label>
+          <Form.Label>Time</Form.Label>
           <Form.Control name="time" required value={currentEvent.time} onChange={handleChange} />
         </Form.Group>
 
