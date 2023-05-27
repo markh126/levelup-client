@@ -1,25 +1,44 @@
-import { useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
 import { useRouter } from 'next/router';
+import PropTypes from 'prop-types';
+import { useState, useEffect } from 'react';
 import { Button, FloatingLabel, Form } from 'react-bootstrap';
+import {
+  createEvent, getSingleEvent, updateEvent,
+} from '../../utils/data/eventData';
 import { getGames } from '../../utils/data/gameData';
-import { createEvent } from '../../utils/data/eventData';
+import { useAuth } from '../../utils/context/authContext';
 
 const initialState = {
   description: '',
   date: '',
   time: '',
-  game: '',
+  game: 0,
 };
 
-const EventForm = ({ user }) => {
+const EventForm = ({ obj }) => {
   const [games, setGames] = useState([]);
   const [currentEvent, setCurrentEvent] = useState(initialState);
   const router = useRouter();
+  const { id } = router.query;
+  const { user } = useAuth();
 
   useEffect(() => {
-    getGames().then((data) => setGames(data));
-  }, []);
+    getGames().then(setGames);
+
+    if (obj.id) {
+      getSingleEvent(id).then((eventObj) => {
+        setCurrentEvent((prevState) => ({
+          ...prevState,
+          id: eventObj.id,
+          description: eventObj.description,
+          date: eventObj.date,
+          time: eventObj.time,
+          game: eventObj.game?.id,
+        }));
+        console.warn(obj);
+      });
+    }
+  }, [obj, id]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -30,34 +49,47 @@ const EventForm = ({ user }) => {
   };
 
   const handleSubmit = (e) => {
+    // Prevent form from being submitted
     e.preventDefault();
 
-    const event = {
-      description: currentEvent.description,
-      date: currentEvent.date,
-      time: currentEvent.time,
-      game: currentEvent.game,
-      userId: user.uid,
-    };
-
-    createEvent(event).then(() => router.push('/events'));
+    if (currentEvent.id) {
+      const event = {
+        id: currentEvent.id,
+        description: currentEvent.description,
+        date: currentEvent.date,
+        time: currentEvent.time,
+        game: Number(currentEvent.game),
+        userId: user.id,
+      };
+      updateEvent(event).then(() => router.push('/events'));
+    } else {
+      const event = {
+        id: currentEvent.id,
+        description: currentEvent.description,
+        date: currentEvent.date,
+        time: currentEvent.time,
+        game: Number(currentEvent.game),
+        userId: user.id,
+      };
+      createEvent(event).then(() => router.push('/events'));
+    }
   };
 
   return (
     <>
       <Form onSubmit={handleSubmit}>
         <Form.Group className="mb-3">
-          <Form.Label>Description</Form.Label>
+          <Form.Label>Title</Form.Label>
           <Form.Control name="description" required value={currentEvent.description} onChange={handleChange} />
         </Form.Group>
 
         <Form.Group className="mb-3">
-          <Form.Label>Date</Form.Label>
+          <Form.Label>Maker</Form.Label>
           <Form.Control name="date" required value={currentEvent.date} onChange={handleChange} />
         </Form.Group>
 
         <Form.Group className="mb-3">
-          <Form.Label>Time</Form.Label>
+          <Form.Label>Number of Players</Form.Label>
           <Form.Control name="time" required value={currentEvent.time} onChange={handleChange} />
         </Form.Group>
 
@@ -93,9 +125,17 @@ const EventForm = ({ user }) => {
 };
 
 EventForm.propTypes = {
-  user: PropTypes.shape({
-    uid: PropTypes.string.isRequired,
-  }).isRequired,
+  obj: PropTypes.shape({
+    id: PropTypes.number,
+    date: PropTypes.string,
+    time: PropTypes.string,
+    // eslint-disable-next-line react/forbid-prop-types
+    game: PropTypes.object,
+  }),
+};
+
+EventForm.defaultProps = {
+  obj: initialState,
 };
 
 export default EventForm;
