@@ -14,12 +14,13 @@ const getSingleGame = (id) => new Promise((resolve, reject) => {
     .catch(reject);
 });
 
-const createGame = (game) => new Promise((resolve, reject) => {
+const createGame = (game, uid) => new Promise((resolve, reject) => {
   fetch(`${clientCredentials.databaseURL}/games`, {
     method: 'POST',
     body: JSON.stringify(game),
     headers: {
       'Content-Type': 'application/json',
+      Authorization: `${uid}`,
     },
   })
     .then((response) => response.json())
@@ -27,11 +28,12 @@ const createGame = (game) => new Promise((resolve, reject) => {
     .catch(reject);
 });
 
-const updateGame = (game) => new Promise((resolve, reject) => {
+const updateGame = (game, uid) => new Promise((resolve, reject) => {
   fetch(`${clientCredentials.databaseURL}/games/${game.id}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
+      Authorization: `${uid}`,
     },
     body: JSON.stringify(game),
   })

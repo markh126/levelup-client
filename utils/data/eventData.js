@@ -20,13 +20,14 @@ const getSingleEvent = (id) => new Promise((resolve, reject) => {
     .catch(reject);
 });
 
-const createEvent = (event) => new Promise((resolve, reject) => {
+const createEvent = (event, uid) => new Promise((resolve, reject) => {
   fetch(`${clientCredentials.databaseURL}/events`, {
     method: 'POST',
-    body: JSON.stringify(event),
     headers: {
       'Content-Type': 'application/json',
+      Authorization: `${uid}`,
     },
+    body: JSON.stringify(event),
   })
     .then((response) => response.json())
     .then((data) => resolve(data))
