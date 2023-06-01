@@ -12,7 +12,7 @@ const initialState = {
   description: '',
   date: '',
   time: '',
-  game: '',
+  game: 0,
 };
 
 const EventForm = ({ obj }) => {
