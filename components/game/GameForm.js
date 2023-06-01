@@ -61,9 +61,9 @@ const GameForm = ({ obj }) => {
         numberOfPlayers: Number(currentGame.numberOfPlayers),
         skillLevel: Number(currentGame.skillLevel),
         gameType: Number(currentGame.gameType),
-        userId: user.uid,
+        gamer: user.uid,
       };
-      updateGame(game).then(() => router.push('/'));
+      updateGame(game, user.uid).then(() => router.push('/'));
     } else {
       const game = {
         maker: currentGame.maker,
@@ -71,9 +71,9 @@ const GameForm = ({ obj }) => {
         numberOfPlayers: Number(currentGame.numberOfPlayers),
         skillLevel: Number(currentGame.skillLevel),
         gameType: Number(currentGame.gameType),
-        userId: user.uid,
+        gamer: user.uid,
       };
-      createGame(game).then(() => router.push('/'));
+      createGame(game, user.uid).then(() => router.push('/'));
     }
   };
 

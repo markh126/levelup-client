@@ -58,8 +58,7 @@ const EventForm = ({ obj }) => {
         description: currentEvent.description,
         date: currentEvent.date,
         time: currentEvent.time,
-        game: currentEvent.game,
-        userId: user.uid,
+        game: Number(currentEvent.game),
       };
       updateEvent(event).then(() => router.push('/events'));
     } else {
@@ -68,10 +67,10 @@ const EventForm = ({ obj }) => {
         description: currentEvent.description,
         date: currentEvent.date,
         time: currentEvent.time,
-        game: currentEvent.game,
-        userId: user.uid,
+        game: Number(currentEvent.game),
+        organizer: user.uid,
       };
-      createEvent(event).then(() => router.push('/events'));
+      createEvent(event, user.uid).then(() => router.push('/events'));
     }
   };
 
@@ -130,7 +129,7 @@ EventForm.propTypes = {
     date: PropTypes.string,
     time: PropTypes.string,
     // eslint-disable-next-line react/forbid-prop-types
-    game: PropTypes.object,
+    game: PropTypes.number,
   }),
 };
 
