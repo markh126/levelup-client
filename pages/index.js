@@ -8,13 +8,13 @@ function Home() {
   const [games, setGames] = useState([]);
   const router = useRouter();
 
-  useEffect(() => {
-    getGames().then((data) => setGames(data));
-  }, []);
-
   const getAllGames = () => {
     getGames().then((data) => setGames(data));
   };
+
+  useEffect(() => {
+    getAllGames();
+  }, []);
 
   return (
     <>

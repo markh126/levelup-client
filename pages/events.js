@@ -3,18 +3,20 @@ import { Button } from 'react-bootstrap';
 import { useRouter } from 'next/router';
 import { getEvents } from '../utils/data/eventData';
 import EventCard from '../components/event/EventCard';
+import { useAuth } from '../utils/context/authContext';
 
 function Events() {
   const [events, setEvents] = useState([]);
   const router = useRouter();
-
-  useEffect(() => {
-    getEvents().then((data) => setEvents(data));
-  }, []);
+  const { user } = useAuth();
 
   const getAllEvents = () => {
-    getEvents().then((data) => setEvents(data));
+    getEvents(user.uid).then((data) => setEvents(data));
   };
+
+  useEffect(() => {
+    getAllEvents();
+  }, []);
 
   return (
     <>
@@ -29,7 +31,7 @@ function Events() {
         </Button>
         {events.map((event) => (
           <section key={`event--${event.id}`} className="event">
-            <EventCard id={event.id} description={event.description} time={event.time} date={event.date} game={event.game} onUpdate={getAllEvents} />
+            <EventCard id={event.id} description={event.description} time={event.time} date={event.date} game={event.game} onUpdate={getAllEvents} joined={event.joined} />
           </section>
         ))}
       </article>
