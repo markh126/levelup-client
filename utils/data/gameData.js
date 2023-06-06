@@ -1,7 +1,12 @@
 import { clientCredentials } from '../client';
 
-const getGames = () => new Promise((resolve, reject) => {
-  fetch(`${clientCredentials.databaseURL}/games`)
+const getGames = (uid) => new Promise((resolve, reject) => {
+  fetch(`${clientCredentials.databaseURL}/games`, {
+    method: 'GET',
+    headers: {
+      Authorization: `${uid}`,
+    },
+  })
     .then((response) => response.json())
     .then(resolve)
     .catch(reject);
