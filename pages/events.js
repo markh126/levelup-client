@@ -29,11 +29,12 @@ function Events() {
         >
           Register New Event
         </Button>
-        {events.map((event) => (
-          <section key={`event--${event.id}`} className="event">
-            <EventCard id={event.id} description={event.description} time={event.time} date={event.date} game={event.game} onUpdate={getAllEvents} joined={event.joined} />
-          </section>
-        ))}
+        {events.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
+          .map((event) => (
+            <section key={`event--${event.id}`} className="event">
+              <EventCard id={event.id} description={event.description} time={event.time} date={event.date} game={event.game} onUpdate={getAllEvents} joined={event.joined} />
+            </section>
+          ))}
       </article>
     </>
   );
